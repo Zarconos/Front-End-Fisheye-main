@@ -11,9 +11,19 @@ function photographerFactory(data) {
       h2.textContent = name;
       const p = document.createElement('p');
       p.textContent = `${city}, ${country}`;
+      p.style.color = '#901C1C';
+      p.style.marginBottom = '-10px';
+      const taglineElement = document.createElement('p');
+      taglineElement.textContent = tagline;
+      const priceElement = document.createElement('p');
+      priceElement.textContent = `${price}€/jour`;
+      priceElement.style.marginTop = '-10px';
+    
       article.appendChild(img);
       article.appendChild(h2);
       article.appendChild(p);
+      article.appendChild(taglineElement);
+      article.appendChild(priceElement);
       return article;
     }
   
