@@ -21,15 +21,15 @@ async function init() {
 
 init();
 
-// Écouter les clics sur les profils de photographes
+
 const photographerLinks = document.querySelectorAll('.photographer_section a');
 photographerLinks.forEach(link => {
   link.addEventListener('click', event => {
-    // Récupérer l'ID du photographe à partir de l'attribut "data-id"
+
     const photographerId = link.dataset.id;
-    // Rediriger vers la page photographer.html avec l'ID en tant que paramètre
+
     window.location.href = `photographer.html?id=${photographerId}`;
-    // Empêcher le comportement par défaut du lien
+    
     event.preventDefault();
   });
 });

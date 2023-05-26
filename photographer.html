@@ -12,25 +12,41 @@
       <img src="assets/images/logo.png" class="logo" />
     </header>
     <main id="main">
-      <div class="photograph-header">
+      <div class="photographer_header">
+        <img src="" alt="" id="photographerImage">
+        <h2 id="photographerName"></h2>
+        <p id="photographerLocation"></p>
+        <p id="photographerTagline"></p>
+        <p id="photographerPrice"></p>
         <button class="contact_button" onclick="displayModal()">Contactez-moi</button>
+      </div>
+      <div class="photographer_profile">
+        <div class="profile_image">
+          <img src="" alt="" id="photographerImage">
+        </div>
+        <div class="profile_info">
+          <h2 id="photographerName"></h2>
+          <p id="photographerLocation"></p>
+          <p id="photographerTagline"></p>
+          <p id="photographerPrice"></p>
+        </div>
       </div>
     </main>
     <div id="contact_modal">
-			<div class="modal">
-				<header>
+      <div class="modal">
+        <header>
           <h2>Contactez-moi</h2>
           <img src="assets/icons/close.svg" onclick="closeModal()" />
         </header>
-				<form>
-					<div>
-						<label for="firstName">Prénom</label>
-						<input id="firstName" type="text" />
-					</div>
+        <form>
+          <div>
+            <label for="firstName">Prénom</label>
+            <input id="firstName" type="text" />
+          </div>
           <button class="contact_button">Envoyer</button>
-				</form>
-			</div>
-		</div>
+        </form>
+      </div>
+    </div>
     <script src="/scripts/pages/photographer.js"></script>
     <script src="/scripts/utils/contactForm.js"></script>
   </body>
