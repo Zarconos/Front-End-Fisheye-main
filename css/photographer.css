@@ -102,3 +102,19 @@ form input {
     padding: 3em;
     margin-bottom: 2em;
 }
+
+.gallery-container {
+    display: grid;
+    grid-template-columns: repeat(3, 300px);
+    grid-column-gap: 95px;
+    grid-row-gap: 71px;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+  }
+  
+  .photo {
+    width: 300px;
+    height: 350px;
+    object-fit: cover;
+  }

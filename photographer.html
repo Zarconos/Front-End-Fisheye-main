@@ -18,34 +18,33 @@
         <p id="photographerLocation"></p>
         <p id="photographerTagline"></p>
         <p id="photographerPrice"></p>
-        <button class="contact_button" onclick="displayModal()">Contactez-moi</button>
-      </div>
-      <div class="photographer_profile">
-        <div class="profile_image">
-          <img src="" alt="" id="photographerImage">
-        </div>
-        <div class="profile_info">
-          <h2 id="photographerName"></h2>
-          <p id="photographerLocation"></p>
-          <p id="photographerTagline"></p>
-          <p id="photographerPrice"></p>
-        </div>
+        <button class="contact_button">Contactez-moi</button>
       </div>
     </main>
-    <div id="contact_modal">
-      <div class="modal">
-        <header>
-          <h2>Contactez-moi</h2>
-          <img src="assets/icons/close.svg" onclick="closeModal()" />
-        </header>
-        <form>
-          <div>
-            <label for="firstName">Prénom</label>
-            <input id="firstName" type="text" />
-          </div>
-          <button class="contact_button">Envoyer</button>
-        </form>
-      </div>
+    <div id="contact_modal" class="modal hidden">
+      <header>
+        <h2>Contactez-moi</h2>
+        <img src="assets/icons/close.svg" class="modal-close" />
+      </header>
+      <form id="modalForm">
+        <div>
+          <label for="firstName">Prénom</label>
+          <input id="firstName" type="text" />
+        </div>
+        <div>
+          <label for="lastName">Nom</label>
+          <input id="lastName" type="text" />
+        </div>
+        <div>
+          <label for="email">E-mail</label>
+          <input id="email" type="email" />
+        </div>
+        <div>
+          <label for="message">Votre message</label>
+          <input id="message" type="text" />
+        </div>
+        <button class="contact_button" type="submit">Envoyer</button>
+      </form>
     </div>
     <script src="/scripts/pages/photographer.js"></script>
     <script src="/scripts/utils/contactForm.js"></script>
