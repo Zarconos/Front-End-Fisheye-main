@@ -39,14 +39,14 @@ const photographerId = parseInt(urlParams.get("id"));
 // Appelle la fonction pour afficher le profil du photographe
 displayPhotographerProfile();
 
-// Déclarez une variable pour stocker les photos
+// Déclare une variable pour stocker les photos
 let allPhotos = [];
 
 // Récupère les médias du photographe depuis le fichier JSON
 async function getPhotographerMedia() {
-  const response = await fetch("data/photographers.json");
-  const { media } = await response.json();
-  return media;
+  const response = await fetch("../data/photographers.json");
+  const data = await response.json();
+  return data.media;
 }
 
 // Fonction pour afficher les photos du photographe
@@ -54,33 +54,45 @@ async function displayPhotos(photographer) {
   const photographerMedia = await getPhotographerMedia();
 
   const photographerPhotos = photographerMedia.filter(
-    (mediaItem) => mediaItem.photographerId === photographer.id && mediaItem.image
+    (mediaItem) => mediaItem.photographerId === photographerId
   );
+  allPhotos.push(photographerPhotos);
+  console.log(allPhotos);
 
   const galleryContainer = document.createElement("div");
   galleryContainer.classList.add("gallery-container");
   document.body.appendChild(galleryContainer);
 
   photographerPhotos.forEach((photo) => {
-    const photoElement = document.createElement("img");
-    photoElement.classList.add("photo");
-    const photoPath = `Sample Photos/${photographer.name}/${photo.image}`;
-    photoElement.src = photoPath;
-    galleryContainer.appendChild(photoElement);
+    const mediaContainer = document.createElement("div");
+    mediaContainer.classList.add("media-container");
+
+    const mediaButton = document.createElement("button");
+    mediaButton.classList.add("media-button");
+    mediaButton.addEventListener("click", function () {
+      openFullscreenMedia(photo.image);
+    });
+
     if (photo.video) {
       const videoElement = document.createElement("video");
       videoElement.classList.add("video");
       const videoPath = `Sample Photos/${photographer.name}/${photo.video}`;
       videoElement.src = videoPath;
-      galleryContainer.appendChild(videoElement);
+
+      mediaButton.appendChild(videoElement);
+    } else {
+      const photoElement = document.createElement("img");
+      photoElement.classList.add("photo");
+      const photoPath = `Sample Photos/${photographer.name}/${photo.image}`;
+      photoElement.src = photoPath;
+
+      mediaButton.appendChild(photoElement);
     }
-    // Ajoute la photo à la variable allPhotos
-    allPhotos.push(photo);
+
+    mediaContainer.appendChild(mediaButton);
+    galleryContainer.appendChild(mediaContainer);
   });
 }
-
-// Appel de la fonction pour afficher les photos
-displayPhotos(photographer);
 
 
 function validateForm() {
@@ -162,9 +174,18 @@ function validateForm(event) {
     return;
   }
 
+  // Afficher les données du formulaire dans la console
+  console.log({
+    firstName: firstNameInput.value,
+    lastName: lastNameInput.value,
+    email: emailInput.value,
+    message: messageInput.value
+  });
+
+  // Fermer la modale après avoir validé le formulaire
+  closeModal();
 }
 
 // Ajoutez un écouteur d'événement au formulaire pour appeler la fonction de validation
 const modalForm = document.getElementById('modalForm');
 modalForm.addEventListener('submit', validateForm);
-
