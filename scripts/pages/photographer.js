@@ -8,7 +8,6 @@ async function displayPhotographerProfile() {
     photographerName.textContent = photographer.name;
     photographerLocation.textContent = `${photographer.city}, ${photographer.country}`;
     photographerTagline.textContent = photographer.tagline;
-    photographerPrice.textContent = `${photographer.price}€/jour`;
     displayPhotos(photographer);
 
     const contactButton = document.querySelector('.contact_button');
@@ -41,6 +40,8 @@ displayPhotographerProfile();
 
 // Déclare une variable pour stocker les photos
 let allPhotos = [];
+let photographerPhotos;
+let photographer;
 
 // Récupère les médias du photographe depuis le fichier JSON
 async function getPhotographerMedia() {
@@ -50,27 +51,31 @@ async function getPhotographerMedia() {
 }
 
 // Fonction pour afficher les photos du photographe
-async function displayPhotos(photographer) {
+async function displayPhotos(photographerData) {
+  photographer = photographerData;
   const photographerMedia = await getPhotographerMedia();
 
-  const photographerPhotos = photographerMedia.filter(
+  photographerPhotos = photographerMedia.filter(
     (mediaItem) => mediaItem.photographerId === photographerId
   );
-  allPhotos.push(photographerPhotos);
-  console.log(allPhotos);
+  allPhotos.push(...photographerPhotos);
 
   const galleryContainer = document.createElement("div");
   galleryContainer.classList.add("gallery-container");
   document.body.appendChild(galleryContainer);
 
-  photographerPhotos.forEach((photo) => {
+  let $i = 0;
+
+  photographerPhotos.forEach((photo, index) => {
     const mediaContainer = document.createElement("div");
     mediaContainer.classList.add("media-container");
 
-    const mediaButton = document.createElement("button");
-    mediaButton.classList.add("media-button");
-    mediaButton.addEventListener("click", function () {
-      openFullscreenMedia(photo.image);
+    const mediaLink = document.createElement("a");
+    mediaLink.href = "#";
+    mediaLink.setAttribute("data-index", $i);
+    mediaLink.addEventListener("click", function (event) {
+      event.preventDefault();
+      openLightbox(parseInt(this.getAttribute("data-index")));
     });
 
     if (photo.video) {
@@ -79,20 +84,50 @@ async function displayPhotos(photographer) {
       const videoPath = `Sample Photos/${photographer.name}/${photo.video}`;
       videoElement.src = videoPath;
 
-      mediaButton.appendChild(videoElement);
+      mediaLink.appendChild(videoElement);
     } else {
       const photoElement = document.createElement("img");
       photoElement.classList.add("photo");
       const photoPath = `Sample Photos/${photographer.name}/${photo.image}`;
       photoElement.src = photoPath;
 
-      mediaButton.appendChild(photoElement);
+      mediaLink.appendChild(photoElement);
     }
-
-    mediaContainer.appendChild(mediaButton);
+    mediaContainer.appendChild(mediaLink);
     galleryContainer.appendChild(mediaContainer);
+
+    $i++;
   });
 }
+
+function openLightbox(index) {
+  const lightboxModal = document.getElementById("lightboxModal");
+  const lightboxMedia = document.getElementById("lightboxMedia");
+
+  const photo = photographerPhotos[index];
+
+  if (photo.video) {
+    const videoPath = `Sample Photos/${photographer.name}/${photo.video}`;
+    lightboxMedia.innerHTML = `<video class="lightbox-content" src="${videoPath}" controls></video>`;
+  } else {
+    const imagePath = `Sample Photos/${photographer.name}/${photo.image}`;
+    lightboxMedia.innerHTML = `<img class="lightbox-content" src="${imagePath}" alt="Media">`;
+  }
+  lightboxModal.style.visibility = "visible";
+  lightboxModal.setAttribute("aria-hidden", "false");
+}
+
+const lightboxCloseBtn = document.getElementById("lightboxCloseBtn");
+lightboxCloseBtn.addEventListener("click", function () {
+  closeLightbox();
+});
+
+function closeLightbox() {
+  const lightboxModal = document.getElementById("lightboxModal");
+  lightboxModal.setAttribute("aria-hidden", "true");
+}
+
+
 
 
 function validateForm() {
@@ -189,3 +224,4 @@ function validateForm(event) {
 // Ajoutez un écouteur d'événement au formulaire pour appeler la fonction de validation
 const modalForm = document.getElementById('modalForm');
 modalForm.addEventListener('submit', validateForm);
+
