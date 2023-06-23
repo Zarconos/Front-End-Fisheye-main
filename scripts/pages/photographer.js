@@ -43,6 +43,7 @@ let allPhotos = [];
 let photographerPhotos;
 let photographer;
 
+
 // Récupère les médias du photographe depuis le fichier JSON
 async function getPhotographerMedia() {
   const response = await fetch("../data/photographers.json");
@@ -64,15 +65,13 @@ async function displayPhotos(photographerData) {
   galleryContainer.classList.add("gallery-container");
   document.body.appendChild(galleryContainer);
 
-  let $i = 0;
-
   photographerPhotos.forEach((photo, index) => {
     const mediaContainer = document.createElement("div");
     mediaContainer.classList.add("media-container");
 
     const mediaLink = document.createElement("a");
     mediaLink.href = "#";
-    mediaLink.setAttribute("data-index", $i);
+    mediaLink.setAttribute("data-index", index);
     mediaLink.addEventListener("click", function (event) {
       event.preventDefault();
       openLightbox(parseInt(this.getAttribute("data-index")));
@@ -93,12 +92,34 @@ async function displayPhotos(photographerData) {
 
       mediaLink.appendChild(photoElement);
     }
-    mediaContainer.appendChild(mediaLink);
-    galleryContainer.appendChild(mediaContainer);
 
-    $i++;
+    const likeCount = document.createElement("span");
+    likeCount.classList.add("like-count");
+    likeCount.textContent = photo.likes;
+
+    const likeButton = document.createElement("button");
+    likeButton.classList.add("like-button");
+    likeButton.innerHTML = `<img src="assets/icons/heart.svg" alt="Like" />`;
+    likeButton.addEventListener("click", function (event) {
+      event.stopPropagation();
+      const photoIndex = parseInt(this.parentNode.getAttribute("data-index"));
+      const selectedPhoto = photographerPhotos[photoIndex];
+
+      updateLikes(selectedPhoto);
+
+      likeCount.textContent = selectedPhoto.likes;
+    });
+
+    mediaContainer.appendChild(mediaLink);
+    mediaContainer.appendChild(likeCount);
+    mediaContainer.appendChild(likeButton);
+
+    galleryContainer.appendChild(mediaContainer);
   });
 }
+
+
+// Fonction pour afficher les photos dans la lightbox
 
 function openLightbox(index) {
   const lightboxModal = document.getElementById("lightboxModal");
@@ -117,6 +138,44 @@ function openLightbox(index) {
   lightboxModal.setAttribute("aria-hidden", "false");
 }
 
+let currentIndex = 0;
+const lightboxPreviousBtn = document.getElementById("lightboxPreviousBtn");
+const lightboxNextBtn = document.getElementById("lightboxNextBtn");
+
+function scrollMedia(direction) {
+  currentIndex += direction;
+  if (currentIndex < 0) {
+    currentIndex = photographerPhotos.length - 1;
+  } else if (currentIndex >= photographerPhotos.length) {
+    currentIndex = 0;
+  }
+  updateLightboxMedia(currentIndex);
+}
+
+function updateLightboxMedia(index) {
+  const lightboxMedia = document.getElementById("lightboxMedia");
+  const photo = photographerPhotos[index];
+
+  if (photo.video) {
+    const videoPath = `Sample Photos/${photographer.name}/${photo.video}`;
+    lightboxMedia.innerHTML = `<video class="lightbox-content" src="${videoPath}" controls></video>`;
+  } else {
+    const imagePath = `Sample Photos/${photographer.name}/${photo.image}`;
+    lightboxMedia.innerHTML = `<img class="lightbox-content" src="${imagePath}" alt="Media">`;
+  }
+}
+
+// Fonction pour faire défiler les photos dans la lightbox
+
+function openLightbox(index) {
+  currentIndex = index;
+  updateLightboxMedia(currentIndex);
+
+  const lightboxModal = document.getElementById("lightboxModal");
+  lightboxModal.style.visibility = "visible";
+  lightboxModal.setAttribute("aria-hidden", "false");
+}
+
 const lightboxCloseBtn = document.getElementById("lightboxCloseBtn");
 lightboxCloseBtn.addEventListener("click", function () {
   closeLightbox();
@@ -125,10 +184,20 @@ lightboxCloseBtn.addEventListener("click", function () {
 function closeLightbox() {
   const lightboxModal = document.getElementById("lightboxModal");
   lightboxModal.setAttribute("aria-hidden", "true");
+  lightboxModal.style.visibility = "hidden";
 }
 
+lightboxPreviousBtn.addEventListener("click", function () {
+  scrollMedia(-1);
+});
+
+lightboxNextBtn.addEventListener("click", function () {
+  scrollMedia(1);
+});
 
 
+
+// Fonction pour récupérer les données du formulaire
 
 function validateForm() {
   const firstName = document.getElementById("firstName");

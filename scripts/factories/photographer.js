@@ -41,6 +41,7 @@ function photographerFactory(data) {
       const priceElement = document.createElement('p');
       priceElement.textContent = `${price}€/jour`;
       priceElement.style.marginTop = '-10px';
+      priceElement.style.color = '#757575';
     
       article.appendChild(imgLink);
       article.appendChild(h2Link);
