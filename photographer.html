@@ -5,10 +5,11 @@
     <meta charset="utf-8">
     <link rel="icon" type="image/png" href="assets/favicon.png">
     <link href="https://fonts.googleapis.com/css?family=DM+Sans&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-f7wXkE3Y9g1o9A06Bgj93LGXDrQ8wMhAZi2EEBB9jtA7hQal+vzXqNJvCCXUtAQxW0MjsyoW77ZLlO4jY5gsow==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Fisheye - photographe</title>
   </head>
   <body>
+    
     <header>
       <a href="./index.html">
       <img src="assets/images/logo.png" class="logo" />
@@ -28,9 +29,11 @@
     </main>
     <div id="contact_modal" class="modal hidden">
       <header>
+        
         <h2>Contactez-moi</h2>
         <img src="assets/icons/close.svg" class="modal-close" />
       </header>
+      
       <form id="modalForm">
         <div>
           <label for="firstName">Prénom</label>
@@ -51,7 +54,15 @@
         <button class="contact_button" type="submit">Envoyer</button>
       </form>
     </div>
-    
+
+    <div id="sortButtons">
+      <label for="sortSelect">Trier par :</label>
+      <select id="sortSelect">
+        <option value="popularity">Popularité</option>
+        <option value="date">Date</option>
+        <option value="alphabetical">Ordre alphabétique</option>
+      </select>
+    </div>
     <dialog class="lightbox" id="lightboxModal" aria-hidden="true">
       <div class="lightbox-container">
         <div class="lightbox-grid1">
@@ -70,9 +81,11 @@
         </div>
       </div>
     </dialog>
-
-
+    
+    <span id="totalLikesCount">0</span>
     <script src="/scripts/pages/photographer.js"></script>
     <script src="/scripts/utils/contactForm.js"></script>
   </body>
 </html>
+
+

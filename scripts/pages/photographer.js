@@ -23,6 +23,7 @@ async function displayPhotographerProfile() {
   }
 }
 
+
 // Récupère les données des photographes depuis le fichier JSON
 async function getPhotographers() {
   const response = await fetch("data/photographers.json");
@@ -61,14 +62,17 @@ async function displayPhotos(photographerData) {
   );
   allPhotos.push(...photographerPhotos);
 
+  
   const galleryContainer = document.createElement("div");
   galleryContainer.classList.add("gallery-container");
   document.body.appendChild(galleryContainer);
-
+  
   photographerPhotos.forEach((photo, index) => {
     const mediaContainer = document.createElement("div");
     mediaContainer.classList.add("media-container");
 
+
+    
     const mediaLink = document.createElement("a");
     mediaLink.href = "#";
     mediaLink.setAttribute("data-index", index);
@@ -93,30 +97,147 @@ async function displayPhotos(photographerData) {
       mediaLink.appendChild(photoElement);
     }
 
+    
+    const likeContainer = document.createElement("div");
+    likeContainer.classList.add("like-container");
+
+    
+    const likeIcon = document.createElement("img");
+    likeIcon.classList.add("media-like-icon");
+    likeIcon.src = "assets/icons/heart-regular.svg";
+    
+
     const likeCount = document.createElement("span");
     likeCount.classList.add("like-count");
     likeCount.textContent = photo.likes;
 
     const likeButton = document.createElement("button");
-    likeButton.classList.add("like-button");
-    likeButton.innerHTML = `<img src="assets/icons/heart.svg" alt="Like" />`;
-    likeButton.addEventListener("click", function (event) {
-      event.stopPropagation();
-      const photoIndex = parseInt(this.parentNode.getAttribute("data-index"));
-      const selectedPhoto = photographerPhotos[photoIndex];
+    likeButton.classList.add("like-button", "media-like-button");
+    likeButton.addEventListener("click", renderLikes);
+   
 
-      updateLikes(selectedPhoto);
-
-      likeCount.textContent = selectedPhoto.likes;
-    });
+    likeButton.appendChild(likeIcon);
+    likeContainer.appendChild(likeButton);
+    likeContainer.appendChild(likeCount);
 
     mediaContainer.appendChild(mediaLink);
-    mediaContainer.appendChild(likeCount);
-    mediaContainer.appendChild(likeButton);
+    mediaContainer.appendChild(likeContainer);
+
+    const photoInfo = document.createElement("div");
+    photoInfo.classList.add("photo-info");
+
+    const photoTitle = document.createElement("span");
+    photoTitle.classList.add("photo-title");
+    photoTitle.textContent = photo.title;
+
+    const photoDate = document.createElement("span");
+    photoDate.classList.add("photo-date");
+    photoDate.textContent = photo.date;
+    
+    photoInfo.appendChild(photoDate);
+
+    photoInfo.appendChild(photoTitle);
+  
+
+    mediaContainer.appendChild(mediaLink);
+    mediaContainer.appendChild(likeContainer);
+    mediaContainer.appendChild(photoInfo);
 
     galleryContainer.appendChild(mediaContainer);
+
+    
+  });
+
+  
+  function renderLikes() {
+    const mediaLikeSpanEl = this.parentNode.querySelector(".like-count");
+    const mediaLikeIconEl = this.querySelector(".media-like-icon");
+  
+    // Vérifier l'URL de l'image pour déterminer l'état du like
+    if (mediaLikeIconEl.src.includes("heart-regular.svg")) {
+      let mediaLikeCount = Number(mediaLikeSpanEl.textContent);
+      mediaLikeCount++;
+      mediaLikeSpanEl.textContent = mediaLikeCount;
+      mediaLikeIconEl.src = "assets/icons/heart-solid.svg";
+      updateTotalLikesCount(1); // Augmenter le compteur total de likes de 1
+    } else if (mediaLikeIconEl.src.includes("heart-solid.svg")) {
+      let mediaLikeCount = Number(mediaLikeSpanEl.textContent);
+      mediaLikeCount--;
+      mediaLikeSpanEl.textContent = mediaLikeCount;
+      mediaLikeIconEl.src = "assets/icons/heart-regular.svg";
+      updateTotalLikesCount(-1); // Diminuer le compteur total de likes de 1
+    }
+  }
+
+// Fonction pour mettre à jour le compteur total de likes
+function updateTotalLikesCount(change) {
+  const totalLikesCountElement = document.getElementById("totalLikesCount");
+  const currentTotalLikesCount = parseInt(totalLikesCountElement.textContent);
+  const newTotalLikesCount = currentTotalLikesCount + change;
+  totalLikesCountElement.textContent = newTotalLikesCount;
+}
+
+// Add an event listener to each media card like button to execute the renderLikes function on click
+const mediaCardLikeButtons = document.querySelectorAll(".media-like-button");
+mediaCardLikeButtons.forEach((button) => {
+  button.addEventListener("click", renderLikes);
+});
+
+// Calculer le total de likes du photographe
+const totalLikesCount = photographerPhotos.reduce(
+  (total, photo) => total + photo.likes,
+  0
+);
+
+// Mettre à jour le contenu de l'élément avec l'ID totalLikesCount
+const totalLikesCountElement = document.getElementById("totalLikesCount");
+totalLikesCountElement.textContent = totalLikesCount;
+
+}
+
+// fonction pour trier les medias
+
+function trierMedias() {
+  var sortSelect = document.getElementById('sortSelect');
+  var mediaContainer = document.querySelector('.gallery-container');
+
+  var mediaElements = Array.from(mediaContainer.querySelectorAll('.media-container'));
+  var sortedMediaElements;
+
+  var sortBy = sortSelect.value;
+
+  if (sortBy === 'popularity') {
+    sortedMediaElements = mediaElements.sort(function(a, b) {
+      var likeCountA = parseInt(a.querySelector('.like-count').textContent);
+      var likeCountB = parseInt(b.querySelector('.like-count').textContent);
+      return likeCountB - likeCountA;
+    });
+  } else if (sortBy === 'date') {
+    sortedMediaElements = mediaElements.sort(function(a, b) {
+      var dateA = new Date(a.querySelector('.photo-date').textContent);
+      var dateB = new Date(b.querySelector('.photo-date').textContent);
+      return dateB - dateA;
+    });
+  } else if (sortBy === 'alphabetical') {
+    sortedMediaElements = mediaElements.sort(function(a, b) {
+      var titleA = a.querySelector('.photo-title').textContent;
+      var titleB = b.querySelector('.photo-title').textContent;
+      return titleA.localeCompare(titleB);
+    });
+  }
+
+  mediaElements.forEach(function(mediaElement) {
+    mediaContainer.removeChild(mediaElement);
+  });
+
+  sortedMediaElements.forEach(function(sortedMediaElement) {
+    mediaContainer.appendChild(sortedMediaElement);
   });
 }
+
+var sortSelect = document.getElementById('sortSelect');
+sortSelect.addEventListener('change', trierMedias);
+
 
 
 // Fonction pour afficher les photos dans la lightbox
@@ -164,6 +285,7 @@ function updateLightboxMedia(index) {
     lightboxMedia.innerHTML = `<img class="lightbox-content" src="${imagePath}" alt="Media">`;
   }
 }
+
 
 // Fonction pour faire défiler les photos dans la lightbox
 
@@ -293,4 +415,3 @@ function validateForm(event) {
 // Ajoutez un écouteur d'événement au formulaire pour appeler la fonction de validation
 const modalForm = document.getElementById('modalForm');
 modalForm.addEventListener('submit', validateForm);
-

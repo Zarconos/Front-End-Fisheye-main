@@ -268,5 +268,29 @@ form input {
   }
   
   .like-button {
-    size: 20px;
+    width: 40px;
+    height: 40px;
+    background-color: transparent;
+    border: transparent;
   }
+
+  #totalLikesCount {
+    z-index: 1;
+    position: fixed;
+    bottom: 0;
+    right: 10%;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em;
+    background: #db8876;
+    color: #000000;
+    border-radius: 0.5rem;
+    font-weight: 200;
+    font-size: 2.5rem;
+  }
+  
+
+
+  
