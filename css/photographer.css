@@ -25,6 +25,11 @@
     cursor: pointer;
 }
 
+.contact_button:hover{
+  background-color: #DB8876;
+  color: black;
+}
+
 .modal {
   border-radius: 5px;
   background-color: #DB8876;
@@ -72,6 +77,7 @@
     font-size: 64px;
     font-weight: normal;
     text-align: center;
+    margin-bottom: -70px;
 }
 
 form {
@@ -107,12 +113,14 @@ form input {
     -o-object-fit: cover;
     object-fit: cover;
     border-radius: 50%;
-    margin-right: 20px;
+    margin-right: 60px;
 }
 
 .photographer_details{
     margin-left: 100px;
 }
+
+
 
 .photographer_header{
     display: flex;
@@ -120,8 +128,9 @@ form input {
     justify-content: space-between;
     align-items: center;
     background-color: #fafafa;
-    padding: 3em;
-    margin-bottom: 2em;
+    padding: 20em;
+    margin-top: -17em;
+    margin-bottom: -22em;
 }
 
 .gallery-container {
@@ -138,6 +147,7 @@ form input {
     width: 350px;
     height: 300px;
     object-fit: cover;
+    border-radius: 2%;
   }
 
   .video {
@@ -161,28 +171,30 @@ form input {
   }
   
   .lightbox-container {
-    position: relative;
-    width: 100%;
-    height: 100%;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 20px;
   }
   
   .lightbox-media {
-    flex: 1;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    max-height: 100%;
+    position: relative;
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
+  
+  .lightbox-title {
+    font-size: 20px;
+    color: #911c1c;
+    padding: 5px 10px;
+    margin-left: 29%;
   }
   
   .lightbox-media img,
   .lightbox-media video {
-    max-width: 100%;
-    max-height: 100%;
+    max-width: 40%;
+    max-height: 70%;
     object-fit: contain;
+    align-self: center;
   }
   
   .lightbox-grid1,
@@ -190,14 +202,25 @@ form input {
     flex: 0 0 10%;
   }
   
-  .lightbox-close,
-  .lightbox-previous,
-  .lightbox-next {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    outline: none;
-    padding: 10px;
+
+
+  .lightbox-previous{
+    position: relative;
+    left: 230%;
+    z-index: 9999;
+  }
+
+  .lightbox-next{
+   position: relative;
+   right: 190%;
+   z-index: 9999;
+  }
+
+  .lightbox-close{
+    align-self: flex-start;
+    position: relative;
+    right: 20%;
+    z-index: 9999;
   }
   
   .lightbox-close-img,
@@ -226,7 +249,7 @@ form input {
   .lightbox-next img,
   .lightbox-close img {
     width: 20px;
-    height: 20px;
+    height: 40px;
     color: #b30000; /* Couleur bordeaux */
   }
   
@@ -250,6 +273,11 @@ form input {
     position: relative;
   }
   
+.media-like-icon {
+  position: relative;
+  left: 320px;
+}
+
   .like-icon {
     position: absolute;
     bottom: 10px;
@@ -261,10 +289,11 @@ form input {
   }
   
   .like-count {
-    display: inline-block;
-    margin-left: 5px;
-    font-size: 14px;
-    color: #333;
+    position: relative;
+    left: 246px;
+    bottom: 5px;
+    font-size: 23px;
+    color: #911c1c;
   }
   
   .like-button {
@@ -272,25 +301,98 @@ form input {
     height: 40px;
     background-color: transparent;
     border: transparent;
+
   }
 
-  #totalLikesCount {
+  #bottom_bar {
     z-index: 1;
     position: fixed;
     bottom: 0;
-    right: 10%;
+    right: 2%;
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-between;
     align-items: center;
-    padding: 1em;
+    /* padding: 1em; */
     background: #db8876;
     color: #000000;
-    border-radius: 0.5rem;
-    font-weight: 200;
-    font-size: 2.5rem;
+    width: 370px;
+    height: 67px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    font-size: 27px;
   }
   
 
-
+#sortSelect {
+  font-size: 17px;
+  font-weight: bold;
+  color: white;
+  padding: 1.1rem;
+  width: 170px;
+  height: 69px;
+  border: none;
+  background-color: #901C1C;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
   
+.photo-title{
+  position: relative;
+  right: 85px;
+  bottom: 33px;
+  font-size: 22px;
+  color: #911c1c;
+}
+
+.photo-date{
+  visibility: hidden;
+}
+
+#photographerName{
+  color: #D3573C;
+    font-size: 36px;
+    margin-bottom: -10px;
+}
+
+#photographerLocation{
+  color: rgb(144, 28, 28);
+  margin-bottom: -10px;
+}
+
+#photographerTagline {
+  color: #525252;
+}
+
+.heart-icon{
+  height: 20px;
+}
+
+.black_heart{
+  height: 25px;
+  right: 30px;
+  position: relative;
+}
+
+#sortButtons{
+  margin: 60px 409px;
+}
+
+#totalLikesCount{
+  position: relative;
+  left: 29px;
+}
+
+.price_likes{
+  position: relative;
+  right: 25px;
+}
+
+h3{
+  font-size: 61px;
+  font-weight: normal;
+}
+
+#modalForm{
+  margin-top: 20px;
+}

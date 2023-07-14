@@ -18,6 +18,10 @@ async function displayPhotographerProfile() {
     closeButton.addEventListener('click', function() {
       closeModal();
     });
+
+    const photographerSubname = document.querySelector('.photographer_Name');
+photographerSubname.textContent = photographer.name;
+
   } else {
     console.error("Photographer not found");
   }
@@ -43,6 +47,8 @@ displayPhotographerProfile();
 let allPhotos = [];
 let photographerPhotos;
 let photographer;
+
+
 
 
 // Récupère les médias du photographe depuis le fichier JSON
@@ -148,24 +154,25 @@ async function displayPhotos(photographerData) {
     
   });
 
-  
+ // Fonction pour augmenter ou diminuer les likes
+
   function renderLikes() {
     const mediaLikeSpanEl = this.parentNode.querySelector(".like-count");
     const mediaLikeIconEl = this.querySelector(".media-like-icon");
   
-    // Vérifier l'URL de l'image pour déterminer l'état du like
+    
     if (mediaLikeIconEl.src.includes("heart-regular.svg")) {
       let mediaLikeCount = Number(mediaLikeSpanEl.textContent);
       mediaLikeCount++;
       mediaLikeSpanEl.textContent = mediaLikeCount;
       mediaLikeIconEl.src = "assets/icons/heart-solid.svg";
-      updateTotalLikesCount(1); // Augmenter le compteur total de likes de 1
+      updateTotalLikesCount(1);
     } else if (mediaLikeIconEl.src.includes("heart-solid.svg")) {
       let mediaLikeCount = Number(mediaLikeSpanEl.textContent);
       mediaLikeCount--;
       mediaLikeSpanEl.textContent = mediaLikeCount;
       mediaLikeIconEl.src = "assets/icons/heart-regular.svg";
-      updateTotalLikesCount(-1); // Diminuer le compteur total de likes de 1
+      updateTotalLikesCount(-1); 
     }
   }
 
@@ -192,6 +199,11 @@ const totalLikesCount = photographerPhotos.reduce(
 // Mettre à jour le contenu de l'élément avec l'ID totalLikesCount
 const totalLikesCountElement = document.getElementById("totalLikesCount");
 totalLikesCountElement.textContent = totalLikesCount;
+
+
+const priceLikesElement = document.querySelector(".price_likes");
+priceLikesElement.textContent = photographer.price + "€ / jour";
+
 
 }
 
@@ -241,10 +253,16 @@ sortSelect.addEventListener('change', trierMedias);
 
 
 // Fonction pour afficher les photos dans la lightbox
-
 function openLightbox(index) {
+  currentIndex = index;
+  updateLightboxMedia(currentIndex);
+
   const lightboxModal = document.getElementById("lightboxModal");
+  lightboxModal.style.visibility = "visible";
+  lightboxModal.setAttribute("aria-hidden", "false");
+
   const lightboxMedia = document.getElementById("lightboxMedia");
+  lightboxMedia.innerHTML = "";
 
   const photo = photographerPhotos[index];
 
@@ -255,8 +273,11 @@ function openLightbox(index) {
     const imagePath = `Sample Photos/${photographer.name}/${photo.image}`;
     lightboxMedia.innerHTML = `<img class="lightbox-content" src="${imagePath}" alt="Media">`;
   }
-  lightboxModal.style.visibility = "visible";
-  lightboxModal.setAttribute("aria-hidden", "false");
+
+  const lightboxTitle = document.createElement("figcaption");
+  lightboxTitle.classList.add("lightbox-title");
+  lightboxTitle.textContent = photo.title;
+  lightboxMedia.appendChild(lightboxTitle);
 }
 
 let currentIndex = 0;
@@ -270,9 +291,21 @@ function scrollMedia(direction) {
   } else if (currentIndex >= photographerPhotos.length) {
     currentIndex = 0;
   }
-  updateLightboxMedia(currentIndex);
+  openLightbox(currentIndex);
 }
 
+// Gestionnaire d'événement pour les touches de direction
+document.addEventListener("keydown", function(event) {
+  if (event.key === "ArrowLeft") {
+    // Appeler la fonction pour passer à la photo précédente
+    scrollMedia(-1);
+  } else if (event.key === "ArrowRight") {
+    // Appeler la fonction pour passer à la photo suivante
+    scrollMedia(1);
+  }
+});
+
+// Fonction pour mettre à jour le contenu de la lightbox
 function updateLightboxMedia(index) {
   const lightboxMedia = document.getElementById("lightboxMedia");
   const photo = photographerPhotos[index];
@@ -286,20 +319,17 @@ function updateLightboxMedia(index) {
   }
 }
 
+// Gestionnaire d'événement pour ouvrir la lightbox
+const mediaContainers = document.querySelectorAll(".media-container");
+mediaContainers.forEach((container, index) => {
+  container.addEventListener("click", () => {
+    openLightbox(index);
+  });
+});
 
-// Fonction pour faire défiler les photos dans la lightbox
-
-function openLightbox(index) {
-  currentIndex = index;
-  updateLightboxMedia(currentIndex);
-
-  const lightboxModal = document.getElementById("lightboxModal");
-  lightboxModal.style.visibility = "visible";
-  lightboxModal.setAttribute("aria-hidden", "false");
-}
-
+// Gestionnaire d'événement pour fermer la lightbox
 const lightboxCloseBtn = document.getElementById("lightboxCloseBtn");
-lightboxCloseBtn.addEventListener("click", function () {
+lightboxCloseBtn.addEventListener("click", function() {
   closeLightbox();
 });
 
@@ -309,17 +339,19 @@ function closeLightbox() {
   lightboxModal.style.visibility = "hidden";
 }
 
-lightboxPreviousBtn.addEventListener("click", function () {
+// Gestionnaire d'événement pour le bouton précédent de la lightbox
+lightboxPreviousBtn.addEventListener("click", function() {
   scrollMedia(-1);
 });
 
-lightboxNextBtn.addEventListener("click", function () {
+// Gestionnaire d'événement pour le bouton suivant de la lightbox
+lightboxNextBtn.addEventListener("click", function() {
   scrollMedia(1);
 });
 
 
-
 // Fonction pour récupérer les données du formulaire
+
 
 function validateForm() {
   const firstName = document.getElementById("firstName");
@@ -415,3 +447,13 @@ function validateForm(event) {
 // Ajoutez un écouteur d'événement au formulaire pour appeler la fonction de validation
 const modalForm = document.getElementById('modalForm');
 modalForm.addEventListener('submit', validateForm);
+
+
+// naviguer avec les flèches du clavier
+
+document.addEventListener("keydown", function(event) {
+  if (event.key === "Escape") {
+    closeModal();
+    closeLightbox();
+  }
+});

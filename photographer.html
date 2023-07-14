@@ -29,8 +29,10 @@
     </main>
     <div id="contact_modal" class="modal hidden">
       <header>
-        
+        <div id="modalHeader">
         <h2>Contactez-moi</h2>
+        <h3 class="photographer_Name"></h3>
+      </div>
         <img src="assets/icons/close.svg" class="modal-close" />
       </header>
       
@@ -63,6 +65,7 @@
         <option value="alphabetical">Ordre alphabétique</option>
       </select>
     </div>
+
     <dialog class="lightbox" id="lightboxModal" aria-hidden="true">
       <div class="lightbox-container">
         <div class="lightbox-grid1">
@@ -70,19 +73,24 @@
             <img src="assets/icons/chevron-left-solid.svg" alt="Flèche gauche">
           </button>
         </div>
-        <figure class="lightbox-grid2 lightbox-media" id="lightboxMedia"></figure>
-        <div class="lightbox-grid3">
-          <button class="lightbox-close" aria-label="Bouton de fermeture du modal de lightbox" id="lightboxCloseBtn">
+        <figure class="lightbox-grid2 lightbox-media" id="lightboxMedia">
+        </figure>          
+        <button class="lightbox-close" aria-label="Bouton de fermeture du modal de lightbox" id="lightboxCloseBtn">
             <img src="assets/icons/close-red.svg" alt="Croix">
           </button>
+        <div class="lightbox-grid3">
+
           <button class="lightbox-next" aria-label="Bouton suivant du modal de lightbox" id="lightboxNextBtn">
             <img src="assets/icons/chevron-right-solid.svg" alt="Flèche droite">
           </button>
         </div>
       </div>
     </dialog>
-    
-    <span id="totalLikesCount">0</span>
+    <div id="bottom_bar">
+    <span id="totalLikesCount">0 </span>
+    <img class="black_heart" src="assets/icons/heart-slid.svg" alt="coeur noir">
+    <p class="price_likes"></p>
+  </div>
     <script src="/scripts/pages/photographer.js"></script>
     <script src="/scripts/utils/contactForm.js"></script>
   </body>
