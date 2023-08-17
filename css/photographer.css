@@ -12,6 +12,10 @@
     margin: 0 100px;
 }
 
+img{
+  overflow-clip-margin: unset;
+}
+
 .contact_button {
     font-size: 17px;
     font-weight: bold;
@@ -114,6 +118,7 @@ form input {
     object-fit: cover;
     border-radius: 50%;
     margin-right: 60px;
+    overflow-clip-margin: unset;
 }
 
 .photographer_details{
@@ -141,6 +146,7 @@ form input {
     justify-content: center;
     align-items: center;
     margin: 0 auto;
+    margin-bottom: 100px;
   }
   
   .photo {
@@ -148,6 +154,7 @@ form input {
     height: 300px;
     object-fit: cover;
     border-radius: 2%;
+    overflow-clip-margin: unset;
   }
 
   .video {
@@ -339,7 +346,6 @@ form input {
   
 .photo-title{
   position: relative;
-  right: 85px;
   bottom: 33px;
   font-size: 22px;
   color: #911c1c;
@@ -395,4 +401,12 @@ h3{
 
 #modalForm{
   margin-top: 20px;
+}
+
+#message{
+  height: 200px;
+}
+
+.photographer_section{
+  margin-bottom: 100px;
 }

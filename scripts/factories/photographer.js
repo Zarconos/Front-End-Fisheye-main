@@ -7,7 +7,7 @@ function photographerFactory(data) {
       const article = document.createElement('article');
       const img = document.createElement('img');
       img.setAttribute('src', picture);
-    
+      img.setAttribute('alt', name);
 
       function getPhotographerData(id) {
 

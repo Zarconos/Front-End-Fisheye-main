@@ -86,12 +86,13 @@ async function displayPhotos(photographerData) {
       event.preventDefault();
       openLightbox(parseInt(this.getAttribute("data-index")));
     });
-
+   
     if (photo.video) {
       const videoElement = document.createElement("video");
       videoElement.classList.add("video");
       const videoPath = `Sample Photos/${photographer.name}/${photo.video}`;
       videoElement.src = videoPath;
+      videoElement.alt = photo.title;
 
       mediaLink.appendChild(videoElement);
     } else {
@@ -99,6 +100,7 @@ async function displayPhotos(photographerData) {
       photoElement.classList.add("photo");
       const photoPath = `Sample Photos/${photographer.name}/${photo.image}`;
       photoElement.src = photoPath;
+      photoElement.alt = photo.title;
 
       mediaLink.appendChild(photoElement);
     }
@@ -111,7 +113,7 @@ async function displayPhotos(photographerData) {
     const likeIcon = document.createElement("img");
     likeIcon.classList.add("media-like-icon");
     likeIcon.src = "assets/icons/heart-regular.svg";
-    
+    likeIcon.alt = "Like Icon";
 
     const likeCount = document.createElement("span");
     likeCount.classList.add("like-count");
@@ -120,7 +122,7 @@ async function displayPhotos(photographerData) {
     const likeButton = document.createElement("button");
     likeButton.classList.add("like-button", "media-like-button");
     likeButton.addEventListener("click", renderLikes);
-   
+    likeButton.alt = "Like Button";
 
     likeButton.appendChild(likeIcon);
     likeContainer.appendChild(likeButton);
@@ -140,9 +142,11 @@ async function displayPhotos(photographerData) {
     photoDate.classList.add("photo-date");
     photoDate.textContent = photo.date;
     
-    photoInfo.appendChild(photoDate);
 
     photoInfo.appendChild(photoTitle);
+    photoInfo.appendChild(photoDate);
+
+   
   
 
     mediaContainer.appendChild(mediaLink);
@@ -406,13 +410,28 @@ function validateForm(event) {
   const emailInput = document.getElementById('email');
   const messageInput = document.getElementById('message');
 
+  const nameRegex = /^[A-Za-z]{3,}$/;
+  const nonLetterRegex = /[^A-Za-z]/;
+
   if (firstNameInput.value === '') {
     showErrorDialog('Veuillez renseigner le champ Prénom.');
+    return;
+  } else if (firstNameInput.value.length < 3) {
+    showErrorDialog('Le champ Prénom doit contenir au moins 3 lettres.');
+    return;
+  } else if (nonLetterRegex.test(firstNameInput.value)) {
+    showErrorDialog('Le champ Prénom ne doit contenir que des lettres.');
     return;
   }
 
   if (lastNameInput.value === '') {
     showErrorDialog('Veuillez renseigner le champ Nom.');
+    return;
+  } else if (lastNameInput.value.length < 3) {
+    showErrorDialog('Le champ Nom doit contenir au moins 3 lettres.');
+    return;
+  } else if (nonLetterRegex.test(lastNameInput.value)) {
+    showErrorDialog('Le champ Nom ne doit contenir que des lettres.');
     return;
   }
 
